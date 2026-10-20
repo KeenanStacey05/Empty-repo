@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: httpd-replica
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: httpd
@@ -18,4 +18,10 @@ spec:
         image: httpd:latest
         ports:
           - containerPort: 80
-       
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "It works!" > /usr/local/apache2/htdocs/index.html
+            echo "Hello world from $(hostname -i)" >> /usr/local/apache2/htdocs/index.html
+            exec httpd-foreground
+            
